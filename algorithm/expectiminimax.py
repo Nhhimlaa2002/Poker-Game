@@ -1,251 +1,155 @@
 """
 expectiminimax.py
 
-This file contains the AI's decision-making function: expectiminimax.
+This file contains the AI's decision-making logic.
 
-Expectiminimax is like minimax (used in games like chess), but it
-also handles randomness. In poker, after we make a move, a new
-community card might be revealed - and we don't know which one in
-advance. So we add a third type of "turn":
+Last week, this file built moves "on the fly" while searching.
+This week, it works in two clear steps instead:
 
-    MAX turn    -> it's the AI's turn. Pick the move with the
-                   HIGHEST expected value (best for the AI).
+    1. Build the whole game tree first (using game_tree.py).
+    2. Search through that already-built tree to find the best move.
 
-    MIN turn    -> it's the opponent's turn. We assume they play
-                   smart, so we imagine they pick whatever is
-                   LOWEST value for us (worst for the AI).
-
-    CHANCE turn -> a new card is about to be revealed. Since we
-                   don't know which card, we look at a few possible
-                   cards and average the results.
+Splitting it into two steps makes it easier to see and explain what
+the AI is "thinking about" - the tree itself represents every future
+the AI is imagining, several moves ahead.
 
 This file connects to:
-    - evaluation.py   (used to score how strong a hand is)
-    - actions.py      (used to get the list of legal moves)
+    - game_tree.py   (builds the tree and knows the game rules)
+    - evaluation.py  (indirectly, through game_tree.py)
+    - actions.py     (indirectly, through game_tree.py)
 """
 
-from algorithm.evaluation import evaluate_hand
-from algorithm.actions import get_possible_actions
+import time
 
-# How much the pot grows when a player raises.
-RAISE_AMOUNT = 20
+from algorithm.game_tree import generate_game_tree, evaluate_state
 
-# How many possible next cards we look at when guessing what
-# card might come next. A real version would check every single
-# card left in the deck, but that is slower and more advanced.
-# For this beginner-friendly version, we just look at the first
-# few cards left in the deck.
-NUMBER_OF_CARDS_TO_CHECK = 3
+# Re-exported here so other files/tests can still do
+# "from algorithm.expectiminimax import apply_action" if needed.
+from algorithm.game_tree import apply_action, is_terminal, get_chance_outcomes
+
+# If a decision takes longer than this many seconds, we print a
+# warning suggesting the search depth be reduced.
+SLOW_DECISION_WARNING_SECONDS = 3.0
+
+# Where decisions get logged, so we have proof the AI is "thinking".
+DECISION_LOG_PATH = "data/decision_log.txt"
 
 
-def evaluate_state(state):
+def search_tree(node):
     """
-    Estimate how good the current situation looks for the AI.
-    This is called a "static evaluation function" - it is used
-    when we stop searching further ahead (depth = 0).
+    Walk through an already-built game tree and find the best
+    action and its expected value.
 
-    state: a dictionary describing the game right now
-    returns: a number - higher means better for the AI
+    node: a tree node, as built by game_tree.generate_game_tree()
+    returns: (best_action, expected_value)
+             best_action is None at leaf nodes and chance nodes,
+             since no single action applies there.
     """
-    known_cards = state["player_hand"] + state["community_cards"]
+    node_type = node["type"]
 
-    if len(known_cards) >= 5:
-        # Use the first 5 known cards to estimate hand strength.
-        # (A more advanced version would check every possible
-        # 5-card combination and pick the best one - that comes
-        # in a later week.)
-        five_cards = known_cards[0:5]
-        hand_score = evaluate_hand(five_cards)
-    else:
-        # Not enough cards yet (for example, before the flop).
-        # Just estimate using the average rank of the cards we have.
-        total_rank = 0
-        for card in known_cards:
-            total_rank = total_rank + card["rank"]
+    if node_type == "leaf":
+        value = evaluate_state(node["state"])
+        return None, value
 
-        if len(known_cards) > 0:
-            average_rank = total_rank / len(known_cards)
-        else:
-            average_rank = 0
+    if node_type == "chance":
+        total_value = 0
+        for child in node["children"]:
+            _, child_value = search_tree(child)
+            total_value = total_value + child["probability"] * child_value
+        return None, total_value
 
-        # Scale the average rank (2-14) down to roughly a 0-9 scale,
-        # so it can be compared fairly with hand_score above.
-        hand_score = (average_rank - 2) / (14 - 2) * 9
+    if node_type == "max":
+        best_action = None
+        best_value = float("-inf")
+        for child in node["children"]:
+            _, child_value = search_tree(child)
+            if child_value > best_value:
+                best_value = child_value
+                best_action = child["action"]
+        return best_action, best_value
 
-    pot = state["pot"]
+    if node_type == "min":
+        best_action = None
+        best_value = float("inf")
+        for child in node["children"]:
+            _, child_value = search_tree(child)
+            if child_value < best_value:
+                best_value = child_value
+                best_action = child["action"]
+        return best_action, best_value
 
-    # The final score cares mostly about hand strength, and a little
-    # bit about how big the pot is (bigger pot = higher stakes).
-    final_score = hand_score * 10 + pot * 0.1
-    return final_score
-
-
-def is_terminal(state):
-    """
-    Check if the game is over and we should stop searching further.
-
-    state: the current game situation
-    returns: True if the hand is finished (someone folded, or we
-             reached showdown), False otherwise
-    """
-    if state["phase"] == "folded":
-        return True
-    if state["phase"] == "showdown":
-        return True
-    return False
-
-
-def apply_action(state, action):
-    """
-    Figure out what the game looks like after a player takes an
-    action. This does NOT change the original state - it builds
-    and returns a new one.
-
-    state: the current game situation
-    action: one of "fold", "check", "call", "raise"
-    returns: a new state dictionary showing the result
-    """
-    # Make a fresh copy of the state so we don't accidentally
-    # change the original one.
-    new_state = dict(state)
-
-    if action == "fold":
-        new_state["phase"] = "folded"
-        return new_state
-
-    if action == "raise":
-        new_state["pot"] = state["pot"] + RAISE_AMOUNT
-
-    if action == "call":
-        new_state["pot"] = state["pot"] + state["current_bet"]
-        new_state["current_bet"] = 0
-
-    # "check" does not change the pot at all.
-
-    # Switch whose turn it is (AI turn becomes opponent turn, and
-    # the other way around).
-    if state["to_move"] == "max":
-        new_state["to_move"] = "min"
-    else:
-        new_state["to_move"] = "max"
-
-    return new_state
-
-
-def get_chance_outcomes(state):
-    """
-    Look at a few possible next cards and build a list of the
-    resulting game states, each with a probability attached.
-
-    state: the current game situation, including the remaining
-           "deck" (list of cards not yet seen)
-    returns: a list of (probability, new_state) pairs
-    """
-    deck = state["deck"]
-
-    if len(deck) == 0:
-        # No cards left to reveal - nothing changes.
-        return [(1.0, dict(state))]
-
-    # Only look at the first few cards in the deck, to keep things
-    # simple and fast for this beginner-friendly version.
-    cards_to_check = []
-    number_to_check = NUMBER_OF_CARDS_TO_CHECK
-    if number_to_check > len(deck):
-        number_to_check = len(deck)
-
-    for i in range(number_to_check):
-        cards_to_check.append(deck[i])
-
-    probability_each = 1.0 / len(cards_to_check)
-
-    outcomes = []
-    for card in cards_to_check:
-        new_state = dict(state)
-        new_state["community_cards"] = state["community_cards"] + [card]
-
-        # Remove the revealed card from the deck copy.
-        new_deck = []
-        for deck_card in deck:
-            if deck_card is not card:
-                new_deck.append(deck_card)
-        new_state["deck"] = new_deck
-
-        # Move on to the next phase of the game.
-        if state["phase"] == "preflop":
-            new_state["phase"] = "flop"
-        elif state["phase"] == "flop":
-            new_state["phase"] = "turn"
-        elif state["phase"] == "turn":
-            new_state["phase"] = "river"
-        else:
-            new_state["phase"] = "showdown"
-
-        new_state["to_move"] = "max"
-        outcomes.append((probability_each, new_state))
-
-    return outcomes
+    raise ValueError("Unknown node type: " + str(node_type))
 
 
 def expectiminimax(state, depth):
     """
-    The main AI decision function. Looks ahead a fixed number of
-    moves (depth) and returns the best action to take right now.
+    Decide the best action for the current state by building the
+    game tree and searching it.
 
     state: the current game situation
-    depth: how many moves ahead to think (0 means stop and just
-           estimate the current situation)
+    depth: how many moves ahead to think
     returns: (best_action, expected_value)
-             best_action is None at chance nodes and leaf nodes,
-             since no single action applies there.
+
+    Example:
+        action, value = expectiminimax(my_state, depth=2)
     """
-    # Base case: stop searching and just estimate the situation.
-    if depth <= 0 or is_terminal(state):
-        score = evaluate_state(state)
-        return None, score
+    tree = generate_game_tree(state, depth)
+    best_action, expected_value = search_tree(tree)
+    return best_action, expected_value
 
-    turn_type = state["to_move"]
 
-    if turn_type == "chance":
-        outcomes = get_chance_outcomes(state)
-        total_value = 0
-        for probability, next_state in outcomes:
-            _, value = expectiminimax(next_state, depth - 1)
-            total_value = total_value + probability * value
-        return None, total_value
+def log_decision(hand_number, phase, action, expected_value, time_taken):
+    """
+    Write one line to the decision log file, recording what the AI
+    decided and how long it took. Useful for showing proof of work
+    and for spotting slow decisions later.
 
-    actions = get_possible_actions(state)
+    hand_number: which hand of poker this is (1, 2, 3, ...)
+    phase: the game phase, e.g. "preflop"
+    action: the action the AI chose
+    expected_value: the expected value the AI calculated
+    time_taken: how many seconds the decision took
+    """
+    log_line = (
+        "Hand #" + str(hand_number)
+        + " | Phase: " + str(phase)
+        + " | Action: " + str(action)
+        + " | Expected value: " + str(round(expected_value, 2))
+        + " | Time: " + str(round(time_taken, 4)) + "s\n"
+    )
 
-    if turn_type == "max":
-        # AI's turn: pick the action with the HIGHEST value.
-        best_action = None
-        best_value = float("-inf")
+    log_file = open(DECISION_LOG_PATH, "a")
+    log_file.write(log_line)
+    log_file.close()
 
-        for action in actions:
-            next_state = apply_action(state, action)
-            _, value = expectiminimax(next_state, depth - 1)
-            if value > best_value:
-                best_value = value
-                best_action = action
 
-        return best_action, best_value
+def make_decision(state, depth, hand_number=1):
+    """
+    The main function other files should call to get the AI's move.
+    Times the decision, logs it, and warns if it was slow.
 
-    if turn_type == "min":
-        # Opponent's turn: pick the action with the LOWEST value
-        # (we assume the opponent plays to hurt us the most).
-        best_action = None
-        best_value = float("inf")
+    state: the current game situation
+    depth: how many moves ahead to think
+    hand_number: which hand of poker this is, used for the log
 
-        for action in actions:
-            next_state = apply_action(state, action)
-            _, value = expectiminimax(next_state, depth - 1)
-            if value < best_value:
-                best_value = value
-                best_action = action
+    returns: the chosen action (a string)
 
-        return best_action, best_value
+    Example:
+        action = make_decision(my_state, depth=2, hand_number=1)
+    """
+    start_time = time.time()
+    action, expected_value = expectiminimax(state, depth)
+    end_time = time.time()
 
-    raise ValueError("Unknown turn type: " + str(turn_type))
+    time_taken = end_time - start_time
+    print("AI decision took", round(time_taken, 4), "seconds")
+
+    if time_taken > SLOW_DECISION_WARNING_SECONDS:
+        print("Warning: decision was slow. Consider lowering AI_DEPTH in config.py")
+
+    log_decision(hand_number, state["phase"], action, expected_value, time_taken)
+
+    return action
 
 
 # --- Example usage ---
@@ -266,8 +170,8 @@ if __name__ == "__main__":
         "current_bet": 20,
         "phase": "preflop",
         "to_move": "max",
+        "actions_this_phase": 0,
     }
 
-    best_action, expected_value = expectiminimax(example_state, depth=2)
-    print("Best action:", best_action)
-    print("Expected value:", expected_value)
+    chosen_action = make_decision(example_state, depth=2, hand_number=1)
+    print("Chosen action:", chosen_action)
