@@ -108,3 +108,91 @@ class GameState:
                 break
             if last_raiser and player is last_raiser:
                 break
+
+    def reset_bets(self):
+        """Reset all players' current_bet to 0 for the next phase."""
+        for player in self.players:
+            player.current_bet = 0
+        self.current_player_index = 0
+
+    def deal_flop(self):
+        """Deal 3 community cards (burn 1 first)."""
+        self.deck.deal(1)
+        self.community_cards.extend(self.deck.deal(3))
+
+    def deal_turn(self):
+        """Deal 1 community card (burn 1 first)."""
+        self.deck.deal(1)
+        self.community_cards.extend(self.deck.deal(1))
+
+    def deal_river(self):
+        """Deal 1 community card (burn 1 first)."""
+        self.deck.deal(1)
+        self.community_cards.extend(self.deck.deal(1))
+
+    def showdown(self):
+        """Find the best hand among active players and award the pot."""
+        active = self.get_active_players()
+        if len(active) == 1:
+            winner = active[0]
+            winner.chips += self.pot
+            return winner, self.pot
+
+        best_player = None
+        best_eval = None
+        for player in active:
+            seven = player.hand + self.community_cards
+            score = self.evaluate_hand(seven)
+            if best_eval is None or score > best_eval:
+                best_eval = score
+                best_player = player
+
+        best_player.chips += self.pot
+        return best_player, self.pot
+
+    def play_round(self, ai_decision_func=None, human_action_func=None, hand_number=1):
+        """Run a full poker round: deal -> bet -> flop -> bet -> turn -> bet -> river -> bet -> showdown."""
+        self.new_round()
+        self.deal_hole_cards()
+
+        # Post blinds (small=10, big=20)
+        sb = self.players[0]
+        bb = self.players[1]
+        sb.chips -= 10
+        sb.current_bet = 10
+        self.pot += 10
+        bb.chips -= 20
+        bb.current_bet = 20
+        self.pot += 20
+        self.current_player_index = 2 % len(self.players)
+
+        # Preflop betting
+        self.betting_round(ai_decision_func, human_action_func)
+        if len(self.get_active_players()) <= 1:
+            return self.showdown()
+
+        # Flop
+        self.reset_bets()
+        self.deal_flop()
+        self.next_phase()
+        self.betting_round(ai_decision_func, human_action_func)
+        if len(self.get_active_players()) <= 1:
+            return self.showdown()
+
+        # Turn
+        self.reset_bets()
+        self.deal_turn()
+        self.next_phase()
+        self.betting_round(ai_decision_func, human_action_func)
+        if len(self.get_active_players()) <= 1:
+            return self.showdown()
+
+        # River
+        self.reset_bets()
+        self.deal_river()
+        self.next_phase()
+        self.betting_round(ai_decision_func, human_action_func)
+
+        # Showdown
+        self.next_phase()
+        return self.showdown()
