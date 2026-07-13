@@ -1,52 +1,94 @@
 # 🃏 Poker Game Simulator with Expectiminimax
 
-This project implements an AI-based Poker Game Simulator that uses the **Expectiminimax algorithm** for strategic decision-making under uncertainty. The simulator models chance events such as card dealing and enables an AI player to evaluate possible game states and choose the optimal action.
+**Course:** CSE 440 — Artificial Intelligence  
+**Group:** 07 | **Section:** 01  
+**Institution:** North South University  
+**Semester:** Summer 2026
 
-The project demonstrates how adversarial search with chance nodes can be applied to imperfect-information games like Poker.
+---
 
+# 👥 Group Members
 
-## 📌 Project Objectives
+| Name | Student ID |
+|------|------------|
+| Nadira Halim Himla | 2221920643 |
+| Sajiah Islam Chowdhury | 2212447642 |
+| S. Anam Ridwan Shanto | 2022563042 |
+| Mohammad Robiul Islam Hasib | 1911677642 |
 
-1.Develop a Poker game simulator.
-2.Implement the Expectiminimax algorithm for AI decision-making.
-3.Model uncertainty caused by random card distribution.
-4.Simulate gameplay between AI and opponent(s).
-5.Evaluate the performance of the Expectiminimax algorithm under different game scenarios.
+---
 
+# 📌 Project Overview
 
+This project aims to develop a Poker Game Simulator that applies the **Expectiminimax algorithm** for intelligent decision-making in an environment involving uncertainty and chance events.
 
-## 🧠 AI Algorithm
+Unlike traditional Minimax, Expectiminimax considers probabilistic outcomes, making it suitable for games like Poker where card distributions introduce randomness. The project focuses on designing the game environment, implementing AI-based strategic gameplay, and evaluating the algorithm's overall performance.
 
-The project implements the following algorithm:
+---
 
- "Expectiminimax"
+# 🎯 Project Objective
 
-The algorithm extends the traditional Minimax algorithm by introducing **chance nodes**, allowing the AI to make optimal decisions in environments where outcomes depend on probability, such as randomly dealt cards.
+Develop a Poker Game Simulator using the **Expectiminimax algorithm** for strategic decision-making under uncertainty by designing the game environment, implementing the required components, and evaluating the algorithm's performance across different game scenarios.
 
+---
 
-## ♠ Game Components
+# ✨ Project Features
 
-The simulator includes:
+### 🎲 Game Environment
+- Simulates a simplified Poker game between a human player and an AI opponent.
+- Manages deck creation, shuffling, card dealing, betting rounds, and game flow.
 
-1.Standard 52-card deck
-2.Card shuffling and dealing
-3.Poker hand evaluation
-4.AI player using Expectiminimax
-5.Opponent player(s)
-6.Turn-based gameplay
-7.Win/Loss determination
+### 🧠 Expectiminimax-Based AI
+- Uses the **Expectiminimax algorithm** for optimal decision-making.
+- Evaluates possible player actions while considering chance nodes caused by random card draws.
+- Selects actions that maximize the AI's expected utility.
 
+### 🃏 Poker Mechanics
+- Standard deck of playing cards.
+- Hand generation and comparison.
+- Basic betting decisions (Check, Call, Raise, Fold).
 
-## 🛠 Technologies Used
+### 📊 Hand Evaluation
+- Detects Poker hand rankings such as:
+  - High Card
+  - One Pair
+  - Two Pair
+  - Three of a Kind
+  - Straight
+  - Flush
+  - Full House
+  - Four of a Kind
+  - Straight Flush
+  - Royal Flush
 
-- Python
-- Jupyter Notebook
-- NumPy
-- Matplotlib
+### 📈 Performance Evaluation
+- Measures AI decision quality.
+- Compares outcomes across different gameplay scenarios.
+- Analyzes the effectiveness of Expectiminimax under uncertainty.
 
+---
 
+# 🛠 Technologies & Tools
 
-## 🚀 Getting Started
+- Python 3.x
+- Tkinter (GUI)
+- Object-Oriented Programming (OOP)
+- Git & GitHub
+
+---
+
+# 📅 Weekly Progress
+
+| Week | Task |
+|------|------|
+| Week 1 | Repository setup, project planning, README preparation, requirement analysis |
+| Week 2 | Game environment design, Poker rules implementation, Expectiminimax algorithm research, initial development |
+
+> This table will be updated throughout the project as new milestones are completed.
+
+---
+
+# 🚀 Getting Started
 
 ### Clone the Repository
 
@@ -54,7 +96,7 @@ The simulator includes:
 git clone https://github.com/Nhhimlaa2002/Poker-Game.git
 ```
 
-### Navigate to the Project
+### Navigate to the Project Directory
 
 ```bash
 cd Poker-Game
@@ -69,32 +111,32 @@ pip install -r requirements.txt
 or install manually
 
 ```bash
-pip install numpy matplotlib jupyter
+pip install tkinter
 ```
 
 ### Run the Project
 
-Launch Jupyter Notebook:
-
 ```bash
-jupyter notebook
+python main.py
 ```
 
-Open the project notebook and run all cells.
+---
 
+# 📈 Expected Outcome
 
+The project will simulate intelligent Poker gameplay where the AI makes strategic decisions using the **Expectiminimax algorithm**. Performance will be evaluated by analyzing the quality of decisions made under uncertainty and comparing outcomes across multiple game scenarios.
 
-## 📊 Performance Evaluation
+---
 
-The simulator is evaluated based on:
+# 📚 References
 
-1.Decision quality
-2.Winning percentage
-3.Average utility value
-4.Execution time
-5.Algorithm performance under uncertainty
+- Stuart Russell & Peter Norvig — *Artificial Intelligence: A Modern Approach*
+- Expectiminimax Algorithm
+- Poker Game Theory
+- Python Documentation
 
+---
 
-## 📈 Expected Output
+# 📝 License
 
-The simulator plays Poker using the Expectiminimax algorithm by evaluating possible future game states and probabilistic outcomes. The AI selects actions that maximize its expected utility while accounting for opponent moves and chance events.
+This project is developed for academic purposes as part of **CSE 440 — Artificial Intelligence** at **North South University**.
