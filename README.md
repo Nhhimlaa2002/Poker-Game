@@ -82,7 +82,25 @@ jupyter notebook
 
 Open the project notebook and run all cells.
 
+Nadira Halim Himla- 2221920642
 
+## Week 1 Progress
+
+- Created the `algorithm/` folder structure for the AI module.
+- Added `evaluation.py` with a hand-strength scoring function (0-9 scale).
+- Added `actions.py` listing legal player actions (fold, check, call, raise).
+- Added the first version of `expectiminimax.py`, implementing the core algorithm with MAX, MIN, and CHANCE node types.
+- Confirmed royal flush scores 9 and a pair scores 1 using `evaluate_hand()`.
+- Confirmed the AI returns a valid action (fold/check/call/raise) without crashing.
+
+## Week 2 Progress
+
+- Added `game_tree.py` to build the full decision tree before searching, instead of generating moves during search.
+- Implemented full-deck chance node handling in `get_chance_outcomes()`, so every possible next card is considered with an equal, correct probability (previously only a small sample was checked).
+- Added `order_actions()` to `actions.py` for move ordering, so promising actions are explored first.
+- Added timing and logging: every AI decision is now recorded to `data/decision_log.txt` with the action taken, expected value, and time spent.
+- Found and fixed a bug where CHANCE nodes were never actually being reached during search, due to `to_move` never switching to `"chance"`. Added an `actions_this_phase` counter to correctly trigger chance nodes once both players have acted.
+- Verified all changes using `check_my_code.py`, confirming hand evaluation, action ordering, and AI decision-making all work correctly.
 
 ## 📊 Performance Evaluation
 
