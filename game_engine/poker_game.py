@@ -4,12 +4,13 @@ from itertools import combinations
 
 
 class Player:
-    def __init__(self, name, chips=1000):
+    def __init__(self, name, chips=1000, is_ai=False):
         self.name = name
         self.chips = chips
         self.hand = []
         self.current_bet = 0
         self.is_folded = False
+        self.is_ai = is_ai
 
     def __repr__(self):
         return f"Player({self.name}, chips={self.chips}, folded={self.is_folded})"
