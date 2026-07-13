@@ -1,5 +1,6 @@
 from game_engine.card import Deck
 from game_engine.hand_evaluator import evaluate_hand
+from itertools import combinations
 
 
 class Player:
@@ -56,4 +57,54 @@ class GameState:
             if best is None or result > best:
                 best = result
         return best
-    
+
+    def get_active_players(self):
+        """Players still in the hand (not folded)."""
+        return [p for p in self.players if not p.is_folded]
+
+    def betting_round(self, ai_decision_func=None, human_action_func=None):
+        """Loop through active players until all bets are equalized."""
+        active = self.get_active_players()
+        if len(active) <= 1:
+            return
+
+        current_bet = max(p.current_bet for p in active)
+        last_raiser = None
+        idx = self.current_player_index
+
+        while True:
+            player = self.players[idx % len(self.players)]
+
+            if not player.is_folded and (player.current_bet < current_bet or player is not last_raiser):
+                if getattr(player, "is_ai", False) and ai_decision_func:
+                    action = ai_decision_func(self, player)
+                elif human_action_func and not getattr(player, "is_ai", False):
+                    action = human_action_func(self, player)
+                else:
+                    action = "call"
+
+                if action == "fold":
+                    player.is_folded = True
+                elif action == "call":
+                    diff = min(current_bet - player.current_bet, player.chips)
+                    player.chips -= diff
+                    player.current_bet += diff
+                    self.pot += diff
+                elif action == "raise":
+                    raise_to = current_bet + 20
+                    total = min(raise_to - player.current_bet, player.chips)
+                    player.chips -= total
+                    player.current_bet += total
+                    self.pot += total
+                    current_bet = player.current_bet
+                    last_raiser = player
+
+                if len(self.get_active_players()) <= 1:
+                    break
+
+            idx += 1
+
+            if last_raiser is None and idx > self.current_player_index + len(self.players):
+                break
+            if last_raiser and player is last_raiser:
+                break
