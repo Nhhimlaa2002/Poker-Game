@@ -26,7 +26,7 @@ Unlike traditional Minimax, Expectiminimax considers probabilistic outcomes, mak
 
 ---
 
-# 🎯 Project Objective
+# 🎯 Objective
 
 Develop a Poker Game Simulator using the **Expectiminimax algorithm** for strategic decision-making under uncertainty by designing the game environment, implementing the required components, and evaluating the algorithm's performance across different game scenarios.
 
@@ -81,8 +81,8 @@ Develop a Poker Game Simulator using the **Expectiminimax algorithm** for strate
 
 | Week | Task |
 |------|------|
-| Week 1 | Repository setup, project planning, README preparation, requirement analysis |
-| Week 2 | Game environment design, Poker rules implementation, Expectiminimax algorithm research, initial development |
+| **Week 1** | Repository setup, project planning, README preparation, requirement analysis, and project structure. |
+| **Week 2** | Poker game environment, Expectiminimax implementation, hand evaluation, game tree development, player actions, GUI integration, testing. |
 
 > This table will be updated throughout the project as new milestones are completed.
 
@@ -125,6 +125,7 @@ python main.py
 # 📈 Expected Outcome
 
 The project will simulate intelligent Poker gameplay where the AI makes strategic decisions using the **Expectiminimax algorithm**. Performance will be evaluated by analyzing the quality of decisions made under uncertainty and comparing outcomes across multiple game scenarios.
+
 
 ---
 
