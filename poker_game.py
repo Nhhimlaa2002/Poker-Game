@@ -66,12 +66,6 @@ class GameState:
     def betting_round(self, ai_decision_func=None, human_action_func=None):
         """Loop through active players until all bets are equalized.
 
-        A player "owes" an action if they haven't responded since the last
-        raise (or haven't acted at all yet this round, if nobody has raised).
-        The round ends once every active, chip-having player has acted and
-        matched the current bet. A raise reopens the action for everyone
-        else at the table - it does NOT end the round.
-        """
         active = self.get_active_players()
         if len(active) <= 1:
             return
