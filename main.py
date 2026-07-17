@@ -1,21 +1,28 @@
-"""
-main.py
-========
-Entry point for the Poker AI Simulator. Run with:
+"""Entry point for the Poker AI Simulator."""
 
-    python main.py
-"""
-
-from frontend.game_ui import launch
+import sys
 
 
-def main() -> None:
-    """Print a startup banner and launch the GUI (or its placeholder)."""
+def main():
     print("Poker AI Simulator")
+    print("Launching game...")
     try:
-        launch()
-    except Exception as exc:  # pragma: no cover - defensive, user-facing
-        print(f"[main] Could not launch GUI: {exc}")
+        # GUI is owned by M3 (frontend/game_ui.py) - not yet available in Week 1-2.
+        from frontend.game_ui import GameApp  # noqa: F401
+        app = GameApp()
+        app.run()
+    except ModuleNotFoundError:
+        print("Frontend GUI not yet available (scheduled for later weeks).")
+        print("Running a headless AI-vs-AI demo round instead...\n")
+        from game_engine.poker_game import GameState, Player, play_round
+
+        players = [Player("Player_1", 1000), Player("AI_Opponent", 1000)]
+        state = GameState(players)
+        winner, pot = play_round(state)
+        print(f"Winner: {winner.name} | Pot: ${pot}")
+    except Exception as e:
+        print(f"Error launching game: {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
