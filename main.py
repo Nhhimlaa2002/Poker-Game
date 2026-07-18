@@ -8,9 +8,10 @@ def main():
     print("Launching game...")
     try:
         # GUI is owned by M3 (frontend/game_ui.py) - not yet available in Week 1-2.
-        from frontend.game_ui import GameApp  # noqa: F401
-        app = GameApp()
-        app.run()
+        from frontend.game_ui import GameApp 
+        root= tk.Tk()# noqa: F401
+        app = GameApp(root)
+        root.mainloop()
     except ModuleNotFoundError:
         print("Frontend GUI not yet available (scheduled for later weeks).")
         print("Running a headless AI-vs-AI demo round instead...\n")
