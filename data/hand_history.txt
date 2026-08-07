@@ -1,0 +1,12 @@
+=== Hand #1 ===
+Community: [3S, 10C, 9H, KC, QD]
+  You (active): [AC, 5S]
+  AI Opponent (active): [7S, 3D]
+Winner: AI Opponent | Pot: $980
+
+=== Hand #1 ===
+Community: [9D, 8C, KH, 5S, 10H]
+  You (active): [JC, 2C]
+  AI Opponent (active): [JS, 6C]
+Winner: You | Pot: $240
+
