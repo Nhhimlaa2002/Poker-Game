@@ -1,23 +1,10 @@
-"""
-monte_carlo.py
-
-Week 4: faster decision-making via random sampling instead of building
-the full expectiminimax tree. Repeatedly deals out plausible remaining
-community cards / opponent holdings from the state's known deck,
-evaluates the resulting hand, and averages the results into a single
-win-probability estimate.
-"""
-
 import random
+import itertools
 
 from algorithm.evaluation import evaluate_hand, _partial_hand_strength
 
 
 def _simulate_one(state, rng):
-    """
-    Run a single random playout: fill out the board with random cards
-    from the remaining deck, and score the resulting best-available hand.
-    """
     deck = list(state["deck"])
     rng.shuffle(deck)
 
@@ -33,17 +20,8 @@ def _simulate_one(state, rng):
 
 
 def monte_carlo_simulate(state, num_simulations=200, rng=None):
-    """
-    Sample unknown cards `num_simulations` times, evaluate the resulting
-    hand each time, and return the average strength (0-9 scale).
-
-    state: dict with player_hand, community_cards, deck
-    num_simulations: how many random playouts to average over
-    returns: float, average hand strength across all simulations
-    """
     rng = rng or random.Random()
     if not state["deck"]:
-        # No cards left to sample - just score what we have.
         known = state["player_hand"] + state["community_cards"]
         return _partial_hand_strength(known)
 
@@ -54,10 +32,6 @@ def monte_carlo_simulate(state, num_simulations=200, rng=None):
 
 
 def monte_carlo_decision(state, num_simulations=200, rng=None):
-    """
-    Turn a Monte Carlo strength estimate into an action, using simple
-    thresholds on the averaged 0-9 hand-strength score.
-    """
     avg_strength = monte_carlo_simulate(state, num_simulations=num_simulations, rng=rng)
     current_bet = state.get("current_bet", 0)
 
@@ -66,3 +40,64 @@ def monte_carlo_decision(state, num_simulations=200, rng=None):
     if avg_strength >= 2 or current_bet == 0:
         return "call" if current_bet > 0 else "check"
     return "fold"
+
+
+def _best5(cards):
+    if len(cards) < 5:
+        return (_partial_hand_strength(cards), [])
+
+    best = None
+    for combo in itertools.combinations(cards, 5):
+        score = (evaluate_hand(list(combo)), [])
+        if best is None or score[0] > best[0]:
+            best = score
+    return best
+
+
+def estimate_win_probability(player_hand, community_cards, deck, num_opponents=1,
+                              simulations=300, rng=None):
+    rng = rng or random.Random()
+    if num_opponents <= 0:
+        return 1.0
+    if not player_hand:
+        return 0.0
+
+    wins = 0.0
+    for _ in range(simulations):
+        pool = list(deck)
+        rng.shuffle(pool)
+
+        idx = 0
+        opponent_hands = []
+        for _ in range(num_opponents):
+            opponent_hands.append(pool[idx:idx + 2])
+            idx += 2
+
+        community = list(community_cards)
+        needed = 5 - len(community)
+        if needed > 0:
+            community = community + pool[idx:idx + needed]
+            idx += needed
+
+        player_best = _best5(player_hand + community)
+        opponent_bests = [_best5(oh + community) for oh in opponent_hands]
+
+        best_opponent = max(opponent_bests) if opponent_bests else (-1, [])
+        if player_best > best_opponent:
+            wins += 1.0
+        elif player_best == best_opponent:
+            wins += 0.5
+
+    return wins / simulations
+
+
+def stars_for_probability(win_probability):
+    if win_probability >= 0.80:
+        return 5
+    if win_probability >= 0.60:
+        return 4
+    if win_probability >= 0.40:
+        return 3
+    if win_probability >= 0.20:
+        return 2
+    return 1

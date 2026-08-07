@@ -1,11 +1,3 @@
-"""
-tournament.py
-
-Week 4: multi-round tournament mode. Runs rounds until only one player
-has chips left, eliminating players as they bust and increasing blinds
-every N rounds.
-"""
-
 import config
 from game_engine.poker_game import GameState, GameHistory
 
@@ -40,12 +32,11 @@ class Tournament:
                 self.eliminated.append(p)
 
     def play_round(self, ai_decision_func=None, human_action_func=None):
-        """Play a single tournament round among currently active players."""
         self.round_number += 1
         self._maybe_increase_blinds()
 
         active = self.active_players()
-        config.SMALL_BLIND = self.small_blind   # respected by GameState.play_round
+        config.SMALL_BLIND = self.small_blind
         config.BIG_BLIND = self.big_blind
 
         state = GameState(active, history=self.history)
@@ -58,7 +49,6 @@ class Tournament:
         return winner, pot
 
     def run(self, ai_decision_func=None, human_action_func=None, max_rounds=500):
-        """Run the tournament to completion (or max_rounds as a safety cap)."""
         results_log = []
         while not self.is_over() and self.round_number < max_rounds:
             winner, pot = self.play_round(ai_decision_func, human_action_func)
@@ -74,5 +64,4 @@ class Tournament:
         return champion, results_log
 
     def leaderboard(self):
-        """Players sorted by chip count, descending — for the GUI panel."""
         return sorted(self.players, key=lambda p: p.chips, reverse=True)
