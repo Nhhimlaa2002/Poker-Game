@@ -46,3 +46,10 @@ Hand #1 | Phase: preflop | Action: raise | Expected value: 61.95 | Time: 0.0001s
 Hand #1 | Phase: preflop | Action: raise | Expected value: 59.69 | Time: 0.0001s
 Hand #1 | Phase: flop | Action: check | Expected value: 55.47 | Time: 0.0001s
 Hand #1 | Phase: flop | Action: raise | Expected value: 64.44 | Time: 0.0001s
+Hand #1 | Phase: preflop | Action: raise | Expected value: 65.0 | Time: 0.0002s
+Hand #1 | Phase: preflop | Action: raise | Expected value: 65.0 | Time: 0.0001s
+Hand #1 | Phase: flop | Action: raise | Expected value: 64.44 | Time: 0.0002s
+Hand #1 | Phase: preflop | Action: raise | Expected value: 81.67 | Time: 0.0001s
+Hand #1 | Phase: flop | Action: raise | Expected value: 60.0 | Time: 0.0003s
+Hand #1 | Phase: preflop | Action: raise | Expected value: 91.67 | Time: 0.0003s
+Hand #1 | Phase: flop | Action: raise | Expected value: 60.0 | Time: 0.0006s
