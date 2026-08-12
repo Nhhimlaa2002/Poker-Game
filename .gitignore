@@ -3,3 +3,6 @@ __pycache__/
 .vscode/
 *.swp
 data/*.csv
+data/decision_log.txt
+data/game_history.json
+data/hand_history.txt
