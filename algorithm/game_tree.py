@@ -45,7 +45,6 @@ def apply_action(state, action):
 
     return new_state
 
-
 def get_chance_outcomes(state):
     deck = state["deck"]
 
