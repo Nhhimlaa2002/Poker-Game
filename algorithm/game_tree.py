@@ -1,6 +1,7 @@
+import random
 from algorithm.evaluation import evaluate_situation
 from algorithm.actions import get_possible_actions, order_actions
-
+SAMPLE_SIZE = 10
 RAISE_AMOUNT = 20
 
 
@@ -51,9 +52,12 @@ def get_chance_outcomes(state):
     if len(deck) == 0:
         return [(1.0, dict(state))]
 
-    probability_each = 1.0 / len(deck)
+    n = min(SAMPLE_SIZE, len(deck))
+    sampled = random.sample(deck, n)
+    probability_each = 1.0 / n
+
     outcomes = []
-    for card in deck:
+    for card in sampled:
         new_state = dict(state)
         new_state["community_cards"] = state["community_cards"] + [card]
         new_state["deck"] = [c for c in deck if c is not card]
