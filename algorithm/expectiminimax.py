@@ -1,5 +1,6 @@
 import os
 import time
+import config
 
 from algorithm.game_tree import generate_game_tree, evaluate_state
 from algorithm.game_tree import apply_action, is_terminal, get_chance_outcomes
@@ -71,7 +72,15 @@ def log_decision(hand_number, phase, action, expected_value, time_taken):
         log_file.write(log_line)
 
 
-def make_decision(state, depth, hand_number=1):
+def make_decision(state, depth=None, hand_number=1, difficulty=None):
+    if difficulty is not None and difficulty in config.DIFFICULTY_PRESETS:
+        preset = config.DIFFICULTY_PRESETS[difficulty]
+        depth = preset["depth"]
+        config.MONTE_CARLO_SIMULATIONS = preset["samples"]
+
+    if depth is None:
+        depth = config.AI_DEPTH
+
     start_time = time.time()
     action, expected_value = expectiminimax(state, depth)
     time_taken = time.time() - start_time
