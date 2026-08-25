@@ -319,15 +319,70 @@ class GameApp:
  
         log_frame = tk.Frame(self.root, bg=BG)
         log_frame.pack(fill="both", expand=True, padx=10, pady=(6, 10))
-        self.log_text = tk.Text(log_frame, height=8, bg=LOG_BG, fg="#d7f5e3",
+
+        # -- General play-by-play log (existing) -----------------------------
+        general_log_frame = tk.Frame(log_frame, bg=BG)
+        general_log_frame.pack(side="left", fill="both", expand=True)
+        self.log_text = tk.Text(general_log_frame, height=8, bg=LOG_BG, fg="#d7f5e3",
                                   font=("Consolas", 9), state="disabled", wrap="word")
-        scrollbar = tk.Scrollbar(log_frame, command=self.log_text.yview)
+        scrollbar = tk.Scrollbar(general_log_frame, command=self.log_text.yview)
         self.log_text.configure(yscrollcommand=scrollbar.set)
         self.log_text.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
- 
+
+        # -- Live Decision-Log panel (structured, updates as actions happen) -
+        decision_log_frame = tk.Frame(log_frame, bg=PANEL_BG, bd=1, relief="ridge")
+        decision_log_frame.pack(side="right", fill="y", padx=(8, 0))
+        tk.Label(decision_log_frame, text="LIVE DECISION LOG", bg=PANEL_BG, fg=TEXT_MUTED,
+                  font=("Georgia", 9, "bold")).pack(pady=(6, 4))
+
+        style = ttk.Style()
+        style.theme_use("clam")
+        style.configure("Decision.Treeview",
+                         background=LOG_BG, fieldbackground=LOG_BG, foreground=TEXT_LIGHT,
+                         font=("Consolas", 9), rowheight=20, borderwidth=0)
+        style.configure("Decision.Treeview.Heading",
+                         background=PANEL_BG, foreground=TEXT_MUTED, font=("Georgia", 8, "bold"))
+        style.map("Decision.Treeview", background=[("selected", "#2f6b4f")])
+
+        columns = ("hand", "phase", "player", "action")
+        self.decision_tree = ttk.Treeview(
+            decision_log_frame, columns=columns, show="headings",
+            height=10, style="Decision.Treeview",
+        )
+        headings = {"hand": "Hand", "phase": "Phase", "player": "Player", "action": "Action"}
+        widths = {"hand": 40, "phase": 55, "player": 100, "action": 60}
+        for col in columns:
+            self.decision_tree.heading(col, text=headings[col])
+            self.decision_tree.column(col, width=widths[col], anchor="center", stretch=False)
+
+        self.decision_tree.tag_configure("fold", foreground="#e77c7c")
+        self.decision_tree.tag_configure("raise", foreground="#7cd68f")
+        self.decision_tree.tag_configure("call", foreground=TEXT_LIGHT)
+        self.decision_tree.tag_configure("check", foreground="#9fd6b5")
+
+        tree_scroll = tk.Scrollbar(decision_log_frame, command=self.decision_tree.yview)
+        self.decision_tree.configure(yscrollcommand=tree_scroll.set)
+        self.decision_tree.pack(side="left", fill="y", padx=(6, 0), pady=(0, 6))
+        tree_scroll.pack(side="left", fill="y", pady=(0, 6), padx=(0, 6))
+
         self._refresh_labels()
- 
+
+    def _log_decision(self, hand_number, phase, player_name, action):
+        """Append one row to the live Decision-Log panel and scroll to it."""
+        tag = action if action in ("fold", "raise", "check") else "call"
+        self.decision_tree.insert(
+            "", "end",
+            values=(hand_number, phase.capitalize(), player_name, action.capitalize()),
+            tags=(tag,),
+        )
+        children = self.decision_tree.get_children()
+        if children:
+            self.decision_tree.see(children[-1])
+
+    def _clear_decision_log(self):
+        self.decision_tree.delete(*self.decision_tree.get_children())
+
     def _build_opponent_panel(self, parent, ai_player):
         frame = tk.Frame(parent, bg=BG)
         name_label = tk.Label(frame, text=ai_player.name, bg=BG, fg=TEXT_LIGHT,
@@ -438,7 +493,12 @@ class GameApp:
         self._set_action_buttons_enabled(False)
  
         action = self.action_var.get() or "call"
-        self._log(f"You chose to {action}.")
+        # The engine only knows fold/call/raise (a "call" with nothing owed
+        # IS a check), but the button the player saw and clicked said
+        # "Check" when to_call was 0 - log that word so it matches reality.
+        display_action = "check" if (action == "call" and to_call == 0) else action
+        self._log(f"You chose to {display_action}.")
+        self._log_decision(self.hand_number, game_state.phase, self.human.name, display_action)
         return action
  
     def ai_decision_func(self, game_state, player):
@@ -456,6 +516,7 @@ class GameApp:
             action = "call"
  
         self._log(f"{player.name} chooses to {action}.")
+        self._log_decision(self.hand_number, game_state.phase, player.name, action)
         return action
  
     # --------------------------------------------------------- round flow --
@@ -505,6 +566,7 @@ class GameApp:
         self.hand_number = 0
         self.new_game_btn.config(text="New Game", command=self.on_new_game_click)
         self._log("\n--- New match started ---")
+        self._clear_decision_log()
         self.on_new_game_click()
  
     # ------------------------------------------------------- tournament ----
