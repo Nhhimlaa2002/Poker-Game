@@ -24,9 +24,14 @@ def cheap_heuristic_decision(state, hand_number=1):
     return "fold"
 
 
-def decide(state, phase, depth=2, hand_number=1):
+def decide(state, phase, depth=2, hand_number=1, opponent_aggressiveness=None):
+    if opponent_aggressiveness is None:
+        opponent_aggressiveness = state.get("opponent_aggressiveness")
     if phase in EXPENSIVE_PHASES:
-        return expectiminimax_decision(state, depth=depth, hand_number=hand_number)
+        return expectiminimax_decision(
+            state, depth=depth, hand_number=hand_number,
+            opponent_aggressiveness=opponent_aggressiveness,
+        )
     return cheap_heuristic_decision(state, hand_number=hand_number)
 
 
