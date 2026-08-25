@@ -10,7 +10,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
  
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, filedialog, messagebox  
  
 import matplotlib
 matplotlib.use("TkAgg")
@@ -22,6 +22,7 @@ from game_engine.card import RANK_NAMES
 from game_engine.poker_game import Player, GameState, GameHistory
 from game_engine.tournament import Tournament
 from algorithm import combined_strategy
+from game_engine.stats_tracker import StatsTracker
  
  
 def _lighten_color(hex_color, amount=30):
@@ -166,6 +167,7 @@ class GameApp:
         self.root.resizable(False, False)
  
         self.history = GameHistory()
+        self.stats_tracker = StatsTracker()
  
         num_players = max(2, min(4, config.NUM_PLAYERS))
         self.human = Player("You", chips=config.STARTING_CHIPS, is_ai=False)
@@ -230,6 +232,13 @@ class GameApp:
         side.place(x=780, y=16, width=204, height=160)
         tk.Label(side, text="TABLE", bg=PANEL_BG, fg=TEXT_MUTED,
                   font=("Georgia", 10, "bold")).pack(pady=(8, 4))
+        stats_side = tk.Frame(self.root, bg=PANEL_BG, bd=1, relief="ridge")
+        stats_side.place(x=780, y=185, width=204, height=140)
+        tk.Label(stats_side, text="SESSION STATS", bg=PANEL_BG, fg=TEXT_MUTED,
+                 font=("Georgia", 10, "bold")).pack(pady=(6, 2))
+        self.stats_label = tk.Label(stats_side, text=self.stats_tracker.get_formatted_stats(),
+                                    bg=PANEL_BG, fg=TEXT_LIGHT, font=("Consolas", 8), justify="left")
+        self.stats_label.pack(pady=2, padx=4)
         self.pot_label = tk.Label(side, text="Pot: $0", bg=PANEL_BG, fg=TEXT_LIGHT, font=("Georgia", 11))
         self.pot_label.pack(pady=2)
         self.your_chips_label = tk.Label(side, bg=PANEL_BG, fg=TEXT_LIGHT, font=("Georgia", 10))
@@ -239,8 +248,28 @@ class GameApp:
                                             font=("Georgia", 9), justify="left")
         self.leaderboard_label.pack(pady=(6, 2))
  
-        actions = tk.Frame(self.root, bg=BG)
-        actions.pack(pady=8)
+        # -- Scrollable Action Toolbar Container -----------------------------
+        actions_container = tk.Frame(self.root, bg=BG)
+        actions_container.pack(fill="x", padx=10, pady=4)
+
+        actions_canvas = tk.Canvas(actions_container, bg=BG, height=44, highlightthickness=0)
+        actions_scrollbar = tk.Scrollbar(actions_container, orient="horizontal", command=actions_canvas.xview)
+        actions_canvas.configure(xscrollcommand=actions_scrollbar.set)
+
+        actions_scrollbar.pack(side="bottom", fill="x")
+        actions_canvas.pack(side="top", fill="x", expand=True)
+
+        actions = tk.Frame(actions_canvas, bg=BG)
+        actions_canvas.create_window((0, 0), window=actions, anchor="nw")
+
+        def _on_actions_configure(event):
+            actions_canvas.configure(scrollregion=actions_canvas.bbox("all"))
+
+        actions.bind("<Configure>", _on_actions_configure)
+
+        # Shift + Mousewheel support for horizontal scrolling
+        actions_canvas.bind_all("<Shift-MouseWheel>", 
+            lambda e: actions_canvas.xview_scroll(int(-1 * (e.delta / 120)), "units"))
  
         # -- New Game button ------------------------------------------------
         self.new_game_btn = tk.Button(actions, text="New Game", bg="#3d8bfd", fg="white",
@@ -248,6 +277,13 @@ class GameApp:
                                         command=self.on_new_game_click)
         self.new_game_btn.grid(row=0, column=0, padx=5)
         add_hover_effect(self.new_game_btn, "#3d8bfd")
+
+        # -- Export Hand History Button ---------------------------------------
+        self.export_btn = tk.Button(actions, text="Export History", bg="#e67e22", fg="white",
+                                     font=("Georgia", 11, "bold"), width=12,
+                                     command=self.on_export_hand_history_click)
+        self.export_btn.grid(row=0, column=10, padx=5)
+        add_hover_effect(self.export_btn, "#e67e22")
  
         # -- Difficulty selector (segmented buttons) ------------------------
         tk.Label(actions, text="Difficulty:", bg=BG, fg=TEXT_LIGHT,
@@ -384,6 +420,7 @@ class GameApp:
         self.decision_tree.delete(*self.decision_tree.get_children())
 
     def _build_opponent_panel(self, parent, ai_player):
+
         frame = tk.Frame(parent, bg=BG)
         name_label = tk.Label(frame, text=ai_player.name, bg=BG, fg=TEXT_LIGHT,
                                 font=("Georgia", 11, "bold"))
@@ -396,6 +433,36 @@ class GameApp:
         chips_label = tk.Label(frame, bg=BG, fg=TEXT_MUTED, font=("Georgia", 9))
         chips_label.pack()
         return {"frame": frame, "player": ai_player, "cards": cards, "chips_label": chips_label}
+
+    # ------------------------------------------------------------- export --
+    def on_export_hand_history_click(self):
+        """Exports session hand history to a user-selected text file."""
+        source_path = "data/hand_history.txt"
+
+        if not os.path.exists(source_path) or os.path.getsize(source_path) == 0:
+            messagebox.showwarning("Export History", "No hand history recorded yet. Play a hand first!")
+            return
+
+        target_file = filedialog.asksaveasfilename(
+            defaultextension=".txt",
+            filetypes=[("Text Files", "*.txt"), ("CSV Files", "*.csv"), ("All Files", "*.*")],
+            title="Save Hand History As",
+            initialfile=f"poker_hand_history_session.txt"
+        )
+
+        if not target_file:
+            return  # User cancelled
+
+        try:
+            with open(source_path, "r") as src, open(target_file, "w") as dst:
+                dst.write(f"=== POKER AI SIMULATOR SESSION HAND HISTORY ===\n")
+                dst.write(f"Total Hands Tracked: {self.hand_number}\n\n")
+                dst.write(src.read())
+
+            messagebox.showinfo("Export Success", f"Hand history successfully saved to:\n{target_file}")
+            self._log(f"Exported hand history to {target_file}")
+        except Exception as e:
+            messagebox.showerror("Export Error", f"Failed to export file: {e}")
  
     # --------------------------------------------------------------- log ---
     def _log(self, message):
@@ -542,17 +609,22 @@ class GameApp:
         self.display_result(winner, pot_amount)
  
     def display_result(self, winner, pot_amount):
+        winner_names = [winner.name] if not isinstance(winner, list) else [w.name for w in winner]
+        self.stats_tracker.record_hand(winner_names, pot_amount)
+        if hasattr(self, 'stats_label'):
+            self.stats_label.config(text=self.stats_tracker.get_formatted_stats())
+
         you_won = winner is self.human
         text = f"{'You win' if you_won else winner.name + ' wins'} ${pot_amount}!"
         self.result_label.config(text=text)
         self._log(text)
- 
+
         broke_players = [p for p in self.all_players if p.chips <= 0]
         if broke_players:
             self._log("Match over - a player is out of chips.")
             self.new_game_btn.config(state="normal", text="Restart Match", command=self.reset_match)
             return
- 
+
         self.new_game_btn.config(state="normal")
         self.root.after(3000, self._auto_next_round)
  
@@ -600,6 +672,11 @@ class GameApp:
             ai_decision_func=self.ai_decision_func,
             human_action_func=self.human_action_func if self.human in self.tournament.active_players() else None,
         )
+
+        winner_names = [winner.name] if not isinstance(winner, list) else [w.name for w in winner]
+        self.stats_tracker.record_hand(winner_names, pot)
+        if hasattr(self, 'stats_label'):
+            self.stats_label.config(text=self.stats_tracker.get_formatted_stats())
  
         self.round_in_progress = False
         self.update_display()
