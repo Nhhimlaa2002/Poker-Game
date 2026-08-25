@@ -1,6 +1,7 @@
 import json
 import os
 
+from algorithm.expectiminimax import make_decision
 from game_engine.card import Deck
 from game_engine.hand_evaluator import best_of_seven, hand_strength_description
 import config
@@ -297,7 +298,7 @@ class GameState:
         with open(path, "a") as f:
             f.write("\n".join(lines) + "\n")
 
-    def ai_make_decision(self, player, depth=None, hand_number=1, strategy=None):
+    def ai_make_decision(self, player, depth=None, hand_number=1, strategy=None, difficulty=None):
         if depth is None:
             depth = config.AI_DEPTH
 
@@ -319,7 +320,7 @@ class GameState:
             action = strategy(state, self.phase)
         else:
             from algorithm.expectiminimax import make_decision
-            action = make_decision(state, depth=depth, hand_number=hand_number)
+            action = make_decision(state, depth=depth, hand_number=hand_number, difficulty=difficulty)
 
         legal = self.legal_actions_for(player)
         if action not in legal:
