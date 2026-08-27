@@ -202,3 +202,57 @@ Community: [QS, 5H, JS, KS, KD]
   AI Opponent 1 (active): [KC, 6D]
 Winner: AI Opponent 1 | Pot: $160
 
+=== Hand #1 ===
+Community: []
+  You (folded): [5D, JS]
+  AI Opponent 1 (active): [2C, 7C]
+Winner: AI Opponent 1 | Pot: $30
+
+=== Hand #2 ===
+Community: [KS, 10D, 2S, 9S, 4D]
+  You (active): [2H, 4S]
+  AI Opponent 1 (active): [9C, QS]
+Winner: You | Pot: $200
+
+=== Hand #3 ===
+Community: [QD, 10C, 2S, JS]
+  You (folded): [7H, 5C]
+  AI Opponent 1 (active): [4H, 4C]
+Winner: AI Opponent 1 | Pot: $80
+
+=== Hand #4 ===
+Community: [AD, AC, 6D, 5C, 2S]
+  You (active): [9C, 2H]
+  AI Opponent 1 (active): [8C, 2D]
+Winner: You | Pot: $280
+
+=== Hand #5 ===
+Community: [9D, 9H, QD, 6S, 7H]
+  You (active): [3S, 3D]
+  AI Opponent 1 (active): [QH, JC]
+Winner: AI Opponent 1 | Pot: $300
+
+=== Hand #6 ===
+Community: [2D, 8C, KS, 7H, JS]
+  You (active): [6S, 4C]
+  AI Opponent 1 (active): [AC, JC]
+Winner: AI Opponent 1 | Pot: $80
+
+=== Hand #7 ===
+Community: [9C, 4D, 6H, AC, 5D]
+  You (active): [5C, 2D]
+  AI Opponent 1 (active): [3H, 3D]
+Winner: You | Pot: $240
+
+=== Hand #8 ===
+Community: [JC, 3H, 9D, KD, 9H]
+  You (active): [8H, 2S]
+  AI Opponent 1 (active): [5H, QS]
+Winner: AI Opponent 1 | Pot: $160
+
+=== Hand #9 ===
+Community: [JC, 4C, 3C, AD, 7C]
+  You (active): [QH, 3S]
+  AI Opponent 1 (active): [10C, 10S]
+Winner: AI Opponent 1 | Pot: $240
+

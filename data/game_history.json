@@ -2073,5 +2073,771 @@
       "AI Opponent 1"
     ],
     "pot_awarded": 160
+  },
+  {
+    "hand": 1,
+    "phase": "preflop",
+    "player": "You",
+    "action": "fold",
+    "pot_after": 30
+  },
+  {
+    "hand": 1,
+    "phase": "showdown",
+    "winners": [
+      "AI Opponent 1"
+    ],
+    "pot_awarded": 30
+  },
+  {
+    "hand": 2,
+    "phase": "preflop",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 60
+  },
+  {
+    "hand": 2,
+    "phase": "preflop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 2,
+    "phase": "preflop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 2,
+    "phase": "flop",
+    "player": "You",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 2,
+    "phase": "flop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 2,
+    "phase": "turn",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 100
+  },
+  {
+    "hand": 2,
+    "phase": "turn",
+    "player": "AI Opponent 1",
+    "action": "raise",
+    "pot_after": 140
+  },
+  {
+    "hand": 2,
+    "phase": "turn",
+    "player": "You",
+    "action": "call",
+    "pot_after": 160
+  },
+  {
+    "hand": 2,
+    "phase": "turn",
+    "player": "You",
+    "action": "call",
+    "pot_after": 160
+  },
+  {
+    "hand": 2,
+    "phase": "river",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 180
+  },
+  {
+    "hand": 2,
+    "phase": "river",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 200
+  },
+  {
+    "hand": 2,
+    "phase": "river",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 200
+  },
+  {
+    "hand": 2,
+    "phase": "showdown",
+    "winners": [
+      "You"
+    ],
+    "pot_awarded": 200
+  },
+  {
+    "hand": 3,
+    "phase": "preflop",
+    "player": "You",
+    "action": "call",
+    "pot_after": 40
+  },
+  {
+    "hand": 3,
+    "phase": "preflop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 40
+  },
+  {
+    "hand": 3,
+    "phase": "flop",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 60
+  },
+  {
+    "hand": 3,
+    "phase": "flop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 3,
+    "phase": "flop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 3,
+    "phase": "turn",
+    "player": "You",
+    "action": "fold",
+    "pot_after": 80
+  },
+  {
+    "hand": 3,
+    "phase": "showdown",
+    "winners": [
+      "AI Opponent 1"
+    ],
+    "pot_awarded": 80
+  },
+  {
+    "hand": 4,
+    "phase": "preflop",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 60
+  },
+  {
+    "hand": 4,
+    "phase": "preflop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 4,
+    "phase": "preflop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 4,
+    "phase": "flop",
+    "player": "You",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 4,
+    "phase": "flop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 4,
+    "phase": "turn",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 100
+  },
+  {
+    "hand": 4,
+    "phase": "turn",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 120
+  },
+  {
+    "hand": 4,
+    "phase": "turn",
+    "player": "AI Opponent 1",
+    "action": "raise",
+    "pot_after": 140
+  },
+  {
+    "hand": 4,
+    "phase": "turn",
+    "player": "You",
+    "action": "call",
+    "pot_after": 160
+  },
+  {
+    "hand": 4,
+    "phase": "turn",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 180
+  },
+  {
+    "hand": 4,
+    "phase": "turn",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 200
+  },
+  {
+    "hand": 4,
+    "phase": "river",
+    "player": "You",
+    "action": "call",
+    "pot_after": 200
+  },
+  {
+    "hand": 4,
+    "phase": "river",
+    "player": "AI Opponent 1",
+    "action": "raise",
+    "pot_after": 220
+  },
+  {
+    "hand": 4,
+    "phase": "river",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 260
+  },
+  {
+    "hand": 4,
+    "phase": "river",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 280
+  },
+  {
+    "hand": 4,
+    "phase": "river",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 280
+  },
+  {
+    "hand": 4,
+    "phase": "showdown",
+    "winners": [
+      "You"
+    ],
+    "pot_awarded": 280
+  },
+  {
+    "hand": 5,
+    "phase": "preflop",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 60
+  },
+  {
+    "hand": 5,
+    "phase": "preflop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 5,
+    "phase": "preflop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 5,
+    "phase": "flop",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 100
+  },
+  {
+    "hand": 5,
+    "phase": "flop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 120
+  },
+  {
+    "hand": 5,
+    "phase": "flop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 120
+  },
+  {
+    "hand": 5,
+    "phase": "turn",
+    "player": "You",
+    "action": "call",
+    "pot_after": 120
+  },
+  {
+    "hand": 5,
+    "phase": "turn",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 120
+  },
+  {
+    "hand": 5,
+    "phase": "river",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 140
+  },
+  {
+    "hand": 5,
+    "phase": "river",
+    "player": "AI Opponent 1",
+    "action": "raise",
+    "pot_after": 180
+  },
+  {
+    "hand": 5,
+    "phase": "river",
+    "player": "You",
+    "action": "call",
+    "pot_after": 200
+  },
+  {
+    "hand": 5,
+    "phase": "river",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 220
+  },
+  {
+    "hand": 5,
+    "phase": "river",
+    "player": "AI Opponent 1",
+    "action": "raise",
+    "pot_after": 260
+  },
+  {
+    "hand": 5,
+    "phase": "river",
+    "player": "You",
+    "action": "call",
+    "pot_after": 280
+  },
+  {
+    "hand": 5,
+    "phase": "river",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 300
+  },
+  {
+    "hand": 5,
+    "phase": "showdown",
+    "winners": [
+      "AI Opponent 1",
+      "You"
+    ],
+    "pot_awarded": 300
+  },
+  {
+    "hand": 6,
+    "phase": "preflop",
+    "player": "You",
+    "action": "call",
+    "pot_after": 40
+  },
+  {
+    "hand": 6,
+    "phase": "preflop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 40
+  },
+  {
+    "hand": 6,
+    "phase": "flop",
+    "player": "You",
+    "action": "call",
+    "pot_after": 40
+  },
+  {
+    "hand": 6,
+    "phase": "flop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 40
+  },
+  {
+    "hand": 6,
+    "phase": "turn",
+    "player": "You",
+    "action": "call",
+    "pot_after": 40
+  },
+  {
+    "hand": 6,
+    "phase": "turn",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 40
+  },
+  {
+    "hand": 6,
+    "phase": "river",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 60
+  },
+  {
+    "hand": 6,
+    "phase": "river",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 6,
+    "phase": "river",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 6,
+    "phase": "showdown",
+    "winners": [
+      "AI Opponent 1"
+    ],
+    "pot_awarded": 80
+  },
+  {
+    "hand": 7,
+    "phase": "preflop",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 60
+  },
+  {
+    "hand": 7,
+    "phase": "preflop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 7,
+    "phase": "preflop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 7,
+    "phase": "flop",
+    "player": "You",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 7,
+    "phase": "flop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 7,
+    "phase": "turn",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 100
+  },
+  {
+    "hand": 7,
+    "phase": "turn",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 120
+  },
+  {
+    "hand": 7,
+    "phase": "turn",
+    "player": "AI Opponent 1",
+    "action": "raise",
+    "pot_after": 140
+  },
+  {
+    "hand": 7,
+    "phase": "turn",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 180
+  },
+  {
+    "hand": 7,
+    "phase": "turn",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 200
+  },
+  {
+    "hand": 7,
+    "phase": "turn",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 200
+  },
+  {
+    "hand": 7,
+    "phase": "river",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 220
+  },
+  {
+    "hand": 7,
+    "phase": "river",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 240
+  },
+  {
+    "hand": 7,
+    "phase": "river",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 240
+  },
+  {
+    "hand": 7,
+    "phase": "showdown",
+    "winners": [
+      "You"
+    ],
+    "pot_awarded": 240
+  },
+  {
+    "hand": 8,
+    "phase": "preflop",
+    "player": "You",
+    "action": "call",
+    "pot_after": 40
+  },
+  {
+    "hand": 8,
+    "phase": "preflop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 40
+  },
+  {
+    "hand": 8,
+    "phase": "flop",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 60
+  },
+  {
+    "hand": 8,
+    "phase": "flop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 8,
+    "phase": "flop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 8,
+    "phase": "turn",
+    "player": "You",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 8,
+    "phase": "turn",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 8,
+    "phase": "river",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 100
+  },
+  {
+    "hand": 8,
+    "phase": "river",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 120
+  },
+  {
+    "hand": 8,
+    "phase": "river",
+    "player": "AI Opponent 1",
+    "action": "raise",
+    "pot_after": 140
+  },
+  {
+    "hand": 8,
+    "phase": "river",
+    "player": "You",
+    "action": "call",
+    "pot_after": 160
+  },
+  {
+    "hand": 8,
+    "phase": "river",
+    "player": "You",
+    "action": "call",
+    "pot_after": 160
+  },
+  {
+    "hand": 8,
+    "phase": "showdown",
+    "winners": [
+      "AI Opponent 1"
+    ],
+    "pot_awarded": 160
+  },
+  {
+    "hand": 9,
+    "phase": "preflop",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 60
+  },
+  {
+    "hand": 9,
+    "phase": "preflop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 9,
+    "phase": "preflop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 9,
+    "phase": "flop",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 100
+  },
+  {
+    "hand": 9,
+    "phase": "flop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 120
+  },
+  {
+    "hand": 9,
+    "phase": "flop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 120
+  },
+  {
+    "hand": 9,
+    "phase": "turn",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 140
+  },
+  {
+    "hand": 9,
+    "phase": "turn",
+    "player": "AI Opponent 1",
+    "action": "raise",
+    "pot_after": 180
+  },
+  {
+    "hand": 9,
+    "phase": "turn",
+    "player": "You",
+    "action": "call",
+    "pot_after": 200
+  },
+  {
+    "hand": 9,
+    "phase": "turn",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 220
+  },
+  {
+    "hand": 9,
+    "phase": "turn",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 240
+  },
+  {
+    "hand": 9,
+    "phase": "turn",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 240
+  },
+  {
+    "hand": 9,
+    "phase": "river",
+    "player": "You",
+    "action": "call",
+    "pot_after": 240
+  },
+  {
+    "hand": 9,
+    "phase": "river",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 240
+  },
+  {
+    "hand": 9,
+    "phase": "showdown",
+    "winners": [
+      "AI Opponent 1"
+    ],
+    "pot_awarded": 240
   }
 ]
