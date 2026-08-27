@@ -2839,5 +2839,76 @@
       "AI Opponent 1"
     ],
     "pot_awarded": 240
+  },
+  {
+    "hand": 1,
+    "phase": "preflop",
+    "player": "You",
+    "action": "call",
+    "pot_after": 40
+  },
+  {
+    "hand": 1,
+    "phase": "preflop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 40
+  },
+  {
+    "hand": 1,
+    "phase": "flop",
+    "player": "You",
+    "action": "raise",
+    "pot_after": 60
+  },
+  {
+    "hand": 1,
+    "phase": "flop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 1,
+    "phase": "flop",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 1,
+    "phase": "turn",
+    "player": "You",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 1,
+    "phase": "turn",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 1,
+    "phase": "river",
+    "player": "You",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 1,
+    "phase": "river",
+    "player": "AI Opponent 1",
+    "action": "call",
+    "pot_after": 80
+  },
+  {
+    "hand": 1,
+    "phase": "showdown",
+    "winners": [
+      "AI Opponent 1"
+    ],
+    "pot_awarded": 80
   }
 ]

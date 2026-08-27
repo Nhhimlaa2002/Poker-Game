@@ -1,6 +1,8 @@
 """Entry point for the Poker AI Simulator."""
 
 import sys
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'support'))
 
 
 def main():

@@ -256,3 +256,9 @@ Community: [JC, 4C, 3C, AD, 7C]
   AI Opponent 1 (active): [10C, 10S]
 Winner: AI Opponent 1 | Pot: $240
 
+=== Hand #1 ===
+Community: [KD, 2S, 6C, 4C, 8D]
+  You (active): [10H, QD]
+  AI Opponent 1 (active): [7D, 6H]
+Winner: AI Opponent 1 | Pot: $80
+
